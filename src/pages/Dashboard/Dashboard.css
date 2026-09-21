@@ -1,0 +1,368 @@
+.dashboard-page {
+    width: 100%;
+    max-width: 1070px;
+    margin: 0 auto;
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin: -25px 0 25px;
+}
+
+.dashboard-intro h1 {
+    margin: 0;
+    color: #0f2038;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1.1px;
+}
+
+.dashboard-intro h1 span {
+    font-size: 26px;
+    letter-spacing: 0;
+}
+
+.dashboard-meta {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 7px;
+    color: #4f5b6b;
+    font-size: 16px;
+    line-height: 1.35;
+}
+
+.dashboard-date {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #263b54;
+    white-space: nowrap;
+}
+
+.dashboard-date svg {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    color: #007db7;
+    stroke-width: 2;
+}
+
+.dashboard-meta p {
+    margin: 0;
+}
+
+.meta-separator {
+    width: 5px;
+    height: 5px;
+    flex: 0 0 5px;
+    border-radius: 50%;
+    background: #c2cbd5;
+}
+
+.dashboard-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.header-pill {
+    display: block;
+    width: 44px;
+    height: 29px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(20, 42, 67, 0.04);
+}
+
+.new-appointment-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 139px;
+    height: 60px;
+    border: 0;
+    border-radius: 9px;
+    padding: 0 14px;
+    background: #006c9e;
+    color: #ffffff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.new-appointment-button svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+
+.new-appointment-button:hover {
+    background: #005b87;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 43px 18px;
+}
+
+.dashboard-card {
+    min-height: 164px;
+    padding: 25px 26px 26px;
+    border: 1px solid #edf0f5;
+    border-radius: 14px;
+    background: #ffffff;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(31, 48, 72, 0.02);
+}
+
+.dashboard-card-messages {
+    min-height: 191px;
+}
+
+.card-heading,
+.card-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-heading h2 {
+    margin: 0;
+    color: #4f5967;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.card-icon {
+    display: grid;
+    width: 43px;
+    height: 43px;
+    place-items: center;
+    border-radius: 13px;
+    background: #e7f0ff;
+    color: #0074ab;
+}
+
+.card-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+}
+
+.card-value-row {
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.card-value-row strong {
+    color: #10223a;
+    font-size: 35px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.card-value-row span {
+    color: #4f5967;
+    font-size: 14px;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    margin-top: 9px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #e3edfc;
+}
+
+.progress-value {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #007aa9;
+}
+
+.progress-patients {
+    width: 81%;
+}
+
+.progress-appointments {
+    width: 59%;
+    background: #3db9ed;
+}
+
+.progress-messages {
+    width: 43%;
+}
+
+/* ==========================================
+   NOUVELLE SECTION : Médecins disponibles
+   ========================================== */
+
+.dashboard-section {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.section-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-header-row h2 {
+    margin: 0;
+    color: #0f2038;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.section-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #006c9e;
+    background-color: #e7f0ff;
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.doctor-card {
+    background-color: #ffffff;
+    border: 1px solid #edf0f5;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 2px rgba(31, 48, 72, 0.02);
+    transition: all 0.2s ease;
+}
+
+.doctor-card:hover {
+    border-color: #dbeafe;
+    box-shadow: 0 4px 12px rgba(31, 48, 72, 0.05);
+}
+
+.doctor-avatar {
+    width: 46px;
+    height: 46px;
+    background-color: #e7f0ff;
+    color: #0074ab;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.doctor-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.doctor-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #10223a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.doctor-specialty {
+    font-size: 13px;
+    color: #4f5967;
+}
+
+.doctor-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+
+.doctor-status.available {
+    background-color: #ecfdf5;
+    color: #059669;
+}
+
+.doctor-status.busy {
+    background-color: #fefce8;
+    color: #ca8a04;
+}
+
+
+
+@media (max-width: 900px) {
+    .dashboard-header {
+        flex-direction: column;
+        margin-top: 0;
+    }
+
+    .dashboard-actions {
+        align-self: flex-end;
+    }
+
+    .doctors-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .doctors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .meta-separator {
+        display: none;
+    }
+
+    .dashboard-intro h1 {
+        font-size: 27px;
+    }
+}

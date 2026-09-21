@@ -1,0 +1,12 @@
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.content-area {
+  margin-left: 273px;
+  flex: 1;
+  padding: 30px;
+  box-sizing: border-box;
+}
