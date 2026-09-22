@@ -33,15 +33,17 @@ export default function Sidebar() {
         <span>Tableau de bord</span>
         </NavLink>
 
-          <NavLink 
-            to="/patients" 
-            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-          >
-            <span className="nav-icon">👥</span>
-            <span>Patients</span>
-          </NavLink>
+         {userRole !== 'PATIENT' && (
+                <NavLink 
+                    to="/patients" 
+                    className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+                >
+                    <span className="nav-icon">👥</span>
+                    <span>Patients</span>
+                </NavLink>
+            )}
 
-          
+         
             <NavLink 
               to="/doctors" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}

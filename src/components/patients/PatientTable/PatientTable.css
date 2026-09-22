@@ -1,0 +1,128 @@
+.table-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.patients-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.patients-table th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.patients-table td {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.patients-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.patients-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.patient-name-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.patient-name-cell strong {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.patient-name-cell span {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.patient-contact-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.rdv-date {
+    font-weight: 500;
+    color: #0f172a;
+}
+
+.medecin-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+.medecin-cell svg {
+    color: #0284c7;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-action.view {
+    background-color: #f0f9ff;
+    color: #0284c7;
+}
+.btn-action.view:hover {
+    background-color: #e0f2fe;
+}
+
+.btn-action.edit {
+    background-color: #f0fdf4;
+    color: #16a34a;
+}
+.btn-action.edit:hover {
+    background-color: #dcfce7;
+}
+
+.btn-action.delete {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+.btn-action.delete:hover {
+    background-color: #fee2e2;
+}
+
+.no-data {
+    text-align: center;
+    color: #94a3b8;
+    padding: 32px !important;
+}

@@ -3,8 +3,17 @@ import { CalendarDays, CalendarClock, Mail, Plus, UsersRound, Stethoscope, Check
 import './Dashboard.css'
 
 export default function Dashboard() {
-    const [user, setUser] = useState({ name: 'Utilisateur', role: 'PATIENT' })
-    const [stats, setStats] = useState({ mainStatLabel: 'Total Patients', mainStatValue: 0, appointments: 0, messages: 0 })
+    const [user, setUser] = useState({ 
+        name: localStorage.getItem('userName') || 'Utilisateur', 
+        role: localStorage.getItem('role') || 'PATIENT',
+        id: localStorage.getItem('userId') || localStorage.getItem('id') || 1
+    })
+    const [stats, setStats] = useState({ 
+        mainStatLabel: 'Total Patients', 
+        mainStatValue: 0, 
+        appointments: 0, 
+        messages: 0 
+    })
     const [doctors, setDoctors] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -16,18 +25,45 @@ export default function Dashboard() {
             ...(token && { 'Authorization': `Bearer ${token}` })
         }
 
+        const userRole = localStorage.getItem('role') || 'PATIENT';
+        const userId = localStorage.getItem('userId') || localStorage.getItem('id');
+
+        if (userRole === 'PATIENT') {
+            setStats(prev => ({ ...prev, mainStatLabel: 'Mes Consultations' }))
+        } else if (userRole === 'MEDECIN') {
+            setStats(prev => ({ ...prev, mainStatLabel: 'Mes Patients' }))
+        }
+
+        // 1. تحديد رابط المواعيد حسب الدور
+        let rdvUrl = '/api/rendezvous/count'; 
+        if (userRole === 'PATIENT' && userId) {
+            rdvUrl = `/api/rendezvous/patient/${userId}?size=1`;
+        } else if (userRole === 'MEDECIN' && userId) {
+            rdvUrl = `/api/rendezvous/medecin/${userId}?size=1`;
+        }
+
+        // 2. تحديد رابط الرسائل حسب الدور
+        let messageUrl = '/api/messages/count';
+        if (userRole === 'PATIENT' && userId) {
+            messageUrl = `/api/messages/count/patient/${userId}`;
+        } else if (userRole === 'MEDECIN' && userId) {
+            messageUrl = `/api/messages/count/medecin/${userId}`;
+        }
+
+        // جلب الإحصائيات بالتسلسل
         fetch('/api/patients/count', { headers })
             .then(res => res.ok ? res.json() : 0)
             .then(totalPatients => {
                 setStats(prev => ({ ...prev, mainStatValue: totalPatients }))
 
-                return fetch('/api/rendezvous/count', { headers })
+                return fetch(rdvUrl, { headers })
             })
             .then(res => res.ok ? res.json() : 0)
-            .then(totalRdv => {
+            .then(rdvData => {
+                const totalRdv = typeof rdvData === 'number' ? rdvData : (rdvData.totalElements || 0);
                 setStats(prev => ({ ...prev, appointments: totalRdv }))
 
-                return fetch('/api/messages/count-unread', { headers })
+                return fetch(messageUrl, { headers })
             })
             .then(res => res.ok ? res.json() : 0)
             .then(unreadMessages => {
@@ -83,24 +119,27 @@ export default function Dashboard() {
             </header>
 
             <div className="dashboard-grid">
-                <article className="dashboard-card">
-                    <div className="card-heading">
-                        <h2>{stats.mainStatLabel}</h2>
-                        <span className="card-icon">
-                            {user.role === 'PATIENT' ? <UserCheck aria-hidden="true" /> : <UsersRound aria-hidden="true" />}
-                        </span>
-                    </div>
-                    <div className="card-value-row">
-                        <strong>{stats.mainStatValue}</strong>
-                    </div>
-                    <div className="progress-track">
-                        <span className="progress-value progress-patients" style={{ width: `${Math.min(stats.mainStatValue * 10, 100)}%` }} />
-                    </div>
-                </article>
+                {/* تم إخفاء البطاقة الأولى (mainStat) إذا كان المستخدم Patient لتفادي التكرار مع بطاقة المواعيد */}
+                {user.role !== 'PATIENT' && (
+                    <article className="dashboard-card">
+                        <div className="card-heading">
+                            <h2>{stats.mainStatLabel}</h2>
+                            <span className="card-icon">
+                                {user.role === 'PATIENT' ? <UserCheck aria-hidden="true" /> : <UsersRound aria-hidden="true" />}
+                            </span>
+                        </div>
+                        <div className="card-value-row">
+                            <strong>{stats.mainStatValue}</strong>
+                        </div>
+                        <div className="progress-track">
+                            <span className="progress-value progress-patients" style={{ width: `${Math.min(stats.mainStatValue * 10, 100)}%` }} />
+                        </div>
+                    </article>
+                )}
 
                 <article className="dashboard-card">
                     <div className="card-heading">
-                        <h2>Rendez-vous à venir</h2>
+                        <h2>{user.role === 'ADMIN' ? 'Total des Rendez-vous' : 'Total de vos RDVs'}</h2>
                         <span className="card-icon"><CalendarClock aria-hidden="true" /></span>
                     </div>
                     <div className="card-value-row">
@@ -114,7 +153,7 @@ export default function Dashboard() {
 
                 <article className="dashboard-card dashboard-card-messages">
                     <div className="card-heading">
-                        <h2>Messages non lus</h2>
+                        <h2>Messages reçus</h2>
                         <span className="card-icon"><Mail aria-hidden="true" /></span>
                     </div>
                     <div className="card-value-row">

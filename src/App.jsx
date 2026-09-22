@@ -14,7 +14,6 @@ export default function App() {
       <Routes>
         
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/403" element={<Forbidden />} /> */}
         
 
           <Route element={<MainLayout />}>
