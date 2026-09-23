@@ -34,7 +34,6 @@ export default function Dashboard() {
             setStats(prev => ({ ...prev, mainStatLabel: 'Mes Patients' }))
         }
 
-        // 1. تحديد رابط المواعيد حسب الدور
         let rdvUrl = '/api/rendezvous/count'; 
         if (userRole === 'PATIENT' && userId) {
             rdvUrl = `/api/rendezvous/patient/${userId}?size=1`;
@@ -42,7 +41,6 @@ export default function Dashboard() {
             rdvUrl = `/api/rendezvous/medecin/${userId}?size=1`;
         }
 
-        // 2. تحديد رابط الرسائل حسب الدور
         let messageUrl = '/api/messages/count';
         if (userRole === 'PATIENT' && userId) {
             messageUrl = `/api/messages/count/patient/${userId}`;
@@ -50,7 +48,6 @@ export default function Dashboard() {
             messageUrl = `/api/messages/count/medecin/${userId}`;
         }
 
-        // جلب الإحصائيات بالتسلسل
         fetch('/api/patients/count', { headers })
             .then(res => res.ok ? res.json() : 0)
             .then(totalPatients => {
@@ -119,7 +116,6 @@ export default function Dashboard() {
             </header>
 
             <div className="dashboard-grid">
-                {/* تم إخفاء البطاقة الأولى (mainStat) إذا كان المستخدم Patient لتفادي التكرار مع بطاقة المواعيد */}
                 {user.role !== 'PATIENT' && (
                     <article className="dashboard-card">
                         <div className="card-heading">

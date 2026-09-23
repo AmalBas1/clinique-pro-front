@@ -29,7 +29,9 @@ export default function ChatWindow({ selectedRdv, currentUserRole }) {
                     });
                     if (res.ok) {
                         const data = await res.json();
-                        setCorrespondantName(`Dr. ${data.prenom || ''} ${data.nom || ''} ${data.specialite ? `- ${data.specialite}` : ''}`);
+                        const fullName = `${data.prenom || ''} ${data.nom || ''}`.trim();
+                        const spec = data.specialite ? `- ${data.specialite}` : '';
+                        setCorrespondantName(`Dr. ${fullName} ${spec}`);
                     }
                 }
             } catch (err) {
@@ -111,8 +113,6 @@ export default function ChatWindow({ selectedRdv, currentUserRole }) {
         .catch(err => console.error(err));
     };
 
-}
-
     if (!selectedRdv) {
         return (
             <div className="chat-placeholder">
@@ -160,3 +160,4 @@ export default function ChatWindow({ selectedRdv, currentUserRole }) {
             </form>
         </div>
     );
+}

@@ -1,6 +1,6 @@
-import { Eye, Pencil, Trash2, Stethoscope } from 'lucide-react'
+import { Eye, Pencil, Trash2, Stethoscope, UserX } from 'lucide-react'
 
-export default function MedecinTable({ medecins, onView, onEdit, onDelete }) {
+export default function MedecinTable({ medecins, onView, onEdit, onDelete, onToggleDispo }) {
     return (
         <div className="table-container">
             <table className="patients-table">
@@ -35,11 +35,10 @@ export default function MedecinTable({ medecins, onView, onEdit, onDelete }) {
 
                                 <td>
                                     <div className="patient-contact-cell">
-                                            <span>
-                                                {medecin.disponible ? '🟢 Disponible' : '🔴 Indisponible'}
-                                            
-                                            </span>                       
-                                 <span>📞 {medecin.telephone || 'Non renseigné'}</span>
+                                        <span>
+                                            {medecin.disponible ? '🟢 Disponible' : '🔴 Indisponible'}
+                                        </span>
+                                        <span>📞 {medecin.telephone || 'Non renseigné'}</span>
                                     </div>
                                 </td>
 
@@ -48,7 +47,18 @@ export default function MedecinTable({ medecins, onView, onEdit, onDelete }) {
                                         <button onClick={() => onView(medecin)} title="Voir" className="btn-action view">
                                             <Eye size={16} />
                                         </button>
-                                        
+
+                                     {onToggleDispo && (
+                                                <button
+                                                    className="btn-action"
+                                                    title="Changer la disponibilité"
+                                                    onClick={() => onToggleDispo(medecin)}
+                                                    style={{ cursor: 'pointer' }}
+                                                >
+                                                    <UserX size={16} />
+                                                </button>
+                                            )}
+
                                         {onEdit && (
                                             <button onClick={() => onEdit(medecin)} title="Modifier" className="btn-action edit">
                                                 <Pencil size={16} />

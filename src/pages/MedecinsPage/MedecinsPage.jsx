@@ -59,6 +59,21 @@ export default function MedecinsPage() {
         .catch(err => console.error("Erreur:", err))
     }
 
+    const handleToggleDispo = (medecin) => {
+        fetch(`/api/medecins/${medecin.id}/indisponible`, {
+            method: 'PUT',
+            headers: getTokenHeaders()
+        })
+        .then(res => {
+            if (res.ok) {
+                fetchMedecins();
+            } else {
+                alert("Erreur lors de la mise à jour du statut.");
+            }
+        })
+        .catch(err => console.error("Erreur:", err));
+    }
+
  const handleDeleteMedecin = (id) => {
     if (window.confirm("Voulez-vous vraiment supprimer ce médecin ?")) {
         fetch(`/api/medecins/${id}`, {
@@ -140,6 +155,7 @@ export default function MedecinsPage() {
                 onView={handleViewClick}
                 onEdit={isAdmin ? handleEditClick : null}
                 onDelete={isAdmin ? handleDeleteMedecin : null}
+                onToggleDispo={handleToggleDispo}
             />
         </div>
     )
