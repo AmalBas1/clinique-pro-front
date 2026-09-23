@@ -155,7 +155,7 @@ export default function MedecinsPage() {
                 onView={handleViewClick}
                 onEdit={isAdmin ? handleEditClick : null}
                 onDelete={isAdmin ? handleDeleteMedecin : null}
-                onToggleDispo={handleToggleDispo}
+                onToggleDispo={isAdmin ? handleToggleDispo : null}
             />
         </div>
     )

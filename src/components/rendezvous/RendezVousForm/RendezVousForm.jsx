@@ -3,6 +3,7 @@ import { useState } from 'react'
 export default function RendezvousForm({ rdvToEdit, mode, userRole = '', currentPatientId = '', currentMedecinId = '', onSubmit, onCancel }) {
     const isPatient = userRole.toUpperCase().includes('PATIENT')
     const isMedecin = userRole.toUpperCase().includes('MEDECIN')
+    const isAdmin = userRole.toUpperCase().includes('ADMIN')
 
     const [formData, setFormData] = useState({
         patientId: rdvToEdit?.patientId || rdvToEdit?.patient?.id || (isPatient ? currentPatientId : ''),
@@ -22,6 +23,7 @@ export default function RendezvousForm({ rdvToEdit, mode, userRole = '', current
     }
 
     const isViewMode = mode === 'view'
+    const canEditStatus = (isAdmin || isMedecin) && mode === 'edit'
 
     return (
         <form onSubmit={handleSubmit} className="rendezvous-form" style={{ background: '#f8fafc', padding: '20px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #e2e8f0' }}>
@@ -68,6 +70,23 @@ export default function RendezvousForm({ rdvToEdit, mode, userRole = '', current
                         style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1', background: isViewMode ? '#f1f5f9' : '#fff' }}
                     />
                 </div>
+
+                {(isViewMode || mode === 'edit') && (
+                    <div>
+                        <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '5px' }}>Statut :</label>
+                        <select
+                            name="statut"
+                            value={formData.statut}
+                            onChange={handleChange}
+                            disabled={isViewMode}
+                            style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1', background: isViewMode ? '#f1f5f9' : '#fff' }}
+                        >
+                            <option value="PENDING">En attente</option>
+                            <option value="CONFIRMED">Confirmé</option>
+                            <option value="CANCELLED">Annulé</option>
+                        </select>
+                    </div>
+                )}
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                     {!isViewMode && (

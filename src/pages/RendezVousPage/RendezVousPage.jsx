@@ -3,6 +3,7 @@ import { Calendar, Clock, Search, Plus, CheckCircle, AlertCircle, XCircle } from
 import RendezvousCard from '../../components/rendezvous/RendezVousCard/RendezVousCard'
 import RendezvousTable from '../../components/rendezvous/RendezVousTable/RendezVousTable'
 import RendezvousForm from '../../components/rendezvous/RendezVousForm/RendezVousForm'
+import api from '../../services/api'
 
 export default function RendezvousPage() {
     const [rendezvous, setRendezvous] = useState([])
@@ -25,20 +26,12 @@ export default function RendezvousPage() {
     const isMedecin = userRole.toUpperCase().includes('MEDECIN')
     const isPatient = userRole.toUpperCase().includes('PATIENT')
 
-    const getTokenHeaders = () => {
-        const token = localStorage.getItem('token') || localStorage.getItem('jwt') || localStorage.getItem('accessToken')
-        return {
-            'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` })
-        }
-    }
-
     useEffect(() => {
         if (isMedecin && currentUserId) {
             setMedecinLoading(true)
-            fetch('/api/medecins', { headers: getTokenHeaders() })
-                .then(res => res.json())
-                .then(data => {
+            api.get('/medecins') 
+                .then(response => {
+                    const data = response.data
                     const medecinsList = data.content || (Array.isArray(data) ? data : [])
                     const myMedecin = medecinsList.find(m => 
                         String(m.userId) === String(currentUserId) || 
@@ -62,17 +55,11 @@ export default function RendezvousPage() {
 
     const fetchRendezvous = async () => {
         setLoading(true)
-        const endpoint = '/api/rendezvous?page=0&size=10'
-
         try {
-            const res = await fetch(endpoint, { headers: getTokenHeaders() })
-            if (!res.ok) {
-                setRendezvous([])
-                return
-            }
-
-            const data = await res.json()
-            console.log("Données reçues de l'API :", data)
+            const response = await api.get('/rendezvous?page=0&size=10')
+            console.log("Données reçues de l'API :", response.data)
+            
+            const data = response.data
             const list = data.content || (Array.isArray(data) ? data : [])
             setRendezvous(list)
         } catch (err) {
@@ -89,48 +76,47 @@ export default function RendezvousPage() {
         }
     }, [currentPatientId, currentMedecinId])
 
-    const handleSaveRendezvous = (formData) => {
-        const dataToSend = {
-            ...formData,
-            patientId: isPatient ? currentPatientId : formData.patientId,
-            medecinId: isMedecin ? currentMedecinId : formData.medecinId,
-            statut: mode === 'edit' ? formData.statut : 'PENDING'
-        }
+    const handleSaveRendezvous = async (formData) => {
+        try {
+            if (mode === 'edit') {
+                if (formData.statut && formData.statut !== selectedRdv.statut) {
+                    await api.patch(`/rendezvous/${selectedRdv.id}/statut?nouveauStatut=${formData.statut}`)
+                }
 
-        const url = mode === 'edit' ? `/api/rendezvous/${selectedRdv.id}` : '/api/rendezvous'
-        const method = mode === 'edit' ? 'PUT' : 'POST'
-
-        fetch(url, {
-            method: method,
-            headers: getTokenHeaders(),
-            body: JSON.stringify(dataToSend)
-        })
-        .then(res => {
-            if (res.ok) {
-                setMode(null)
-                setSelectedRdv(null)
-                fetchRendezvous()
+                const dataToSend = {
+                    ...formData,
+                    patientId: isPatient ? currentPatientId : formData.patientId,
+                    medecinId: isMedecin ? currentMedecinId : formData.medecinId,
+                }
+                await api.put(`/rendezvous/${selectedRdv.id}`, dataToSend)
             } else {
-                alert("Erreur lors de l'enregistrement.")
+                const dataToSend = {
+                    ...formData,
+                    patientId: isPatient ? currentPatientId : formData.patientId,
+                    medecinId: isMedecin ? currentMedecinId : formData.medecinId,
+                    statut: 'PENDING'
+                }
+                await api.post('/rendezvous', dataToSend)
             }
-        })
-        .catch(err => console.error("Erreur:", err))
+
+            setMode(null)
+            setSelectedRdv(null)
+            fetchRendezvous()
+        } catch (err) {
+            console.error("Erreur lors de l'enregistrement :", err)
+            alert("Erreur lors de l'enregistrement.")
+        }
     }
 
-    const handleDeleteRendezvous = (id) => {
+    const handleDeleteRendezvous = async (id) => {
         if (window.confirm("Voulez-vous vraiment supprimer ce rendez-vous ?")) {
-            fetch(`/api/rendezvous/${id}`, {
-                method: 'DELETE',
-                headers: getTokenHeaders()
-            })
-            .then(res => {
-                if (res.ok) {
-                    setRendezvous(prev => prev.filter(r => r.id !== id))
-                } else {
-                    alert("Suppression impossible.")
-                }
-            })
-            .catch(err => console.error("Erreur suppression:", err))
+            try {
+                await api.delete(`/rendezvous/${id}`)
+                setRendezvous(prev => prev.filter(r => r.id !== id))
+            } catch (err) {
+                console.error("Erreur suppression:", err)
+                alert("Suppression impossible.")
+            }
         }
     }
 
