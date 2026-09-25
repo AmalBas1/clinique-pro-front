@@ -1,16 +1,53 @@
-# React + Vite
+# CliniquePro - Front-End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface utilisateur web moderne, ergonomique et responsive développée pour la gestion complète d'une clinique (patients, médecins, rendez-vous et utilisateurs).
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+##  À propos du projet
 
-## React Compiler
+**CliniquePro** est une application front-end conçue pour interagir avec une API backend (Spring Boot). Elle propose une interface adaptée aux différents rôles de la clinique :
+* **Administrateurs** : Gestion globale et configuration.
+* **Médecins** : Consultation des plannings, des rendez-vous..
+* **Secrétaires / Agents** : Prise et gestion des rendez-vous, accueil des patients.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+##  🛠️ Stack Technique
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **Framework** : React.js (avec Vite pour un build ultra-rapide)
+* **Routage** : React Router DOM
+* **Gestion des requêtes HTTP** : Axios (avec intercepteurs pour l'injection automatique du token JWT)
+* **Containerisation** : Docker & Nginx (image `nginxinc/nginx-unprivileged`)
+
+---
+
+## 📂 Architecture des Pages & Parcours
+
+1. **Module d'Authentification (Public)**
+   * `/login` : Connexion sécurisée avec stockage du JWT dans le `localStorage`.
+   * `/register` : Inscription de nouveaux utilisateurs selon leur rôle.
+2. **Tableau de Bord (`/dashboard`)**
+   * Vue d'ensemble et indicateurs clés (statistiques de la clinique).
+3. **Module Patients (`/patients`)**
+   * Liste, recherche, filtrage, ajout, modification des patients.
+4. **Module Médecins (`/medecins`)**
+   * Annuaire des médecins, spécialités et consultation des profils.
+5. **Module Rendez-vous (`/rendez-vous`)**
+   * Gestion et suivi des plannings (Statuts : `PENDING`, `CONFIRMED`, `CANCELLED`).
+   * Sécurisation des routes par rôles et gestion propre des codes d'erreur (ex: `403 Forbidden`).
+
+---
+
+## ⚙️ Installation et Lancement (Développement Local)
+
+### Prérequis
+* Node.js (version 22 ou supérieure recommandée)
+* npm
+
+### Étapes
+1. Cloner le projet et installer les dépendances :
+   ```bash
+   git clone https://github.com/AmalBas1/clinique-pro-front
+   cd clinique-pro-front
+   npm install
