@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login/Login';
-import MainLayout from './components/common/MainLayout/MainLayout.jsx';
+import MainLayout from './components/common/Mainlayout/MainLayout';
 
 import Dashboard from './pages/Dashboard/Dashboard';
 import Patients from './pages/PatientsPage/PatientsPage';
 import Doctors from './pages/MedecinsPage/MedecinsPage';
-import Appointments from './pages/RendezVousPage/RendezVousPage.jsx';
+import Appointments from './pages/RendezVousPage/RendezVousPage';
 import MessagesPage from './pages/MessagesPage/MessagesPage';
 import RegisterUserPage from './pages/RegisterUserPage/RegisterUserPage'; 
-import PatientProfilePage from './pages/PatientProfilePage/PatientProfilePage.jsx'; 
+import PatientProfilePage from './pages/PatientProfilePage/PatientProfilePage'; 
 import MedecinProfilePage from './pages/MedecinProfilePage/MedecinProfilePage'; 
 
 export default function App() {
