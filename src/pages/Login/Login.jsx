@@ -28,6 +28,9 @@ export default function Login() {
         const userId = data.user?.id || data.id;
         localStorage.setItem('userId', userId);
 
+        const prenom = data.prenom || data.user?.prenom || data.user?.nom || data.nom || 'Utilisateur';
+        localStorage.setItem('userName', prenom);
+
         if (role === 'PATIENT' && userId) {
           try {
             const patientRes = await axios.get(`http://localhost:8080/api/patients/user/${userId}`, {
@@ -40,6 +43,21 @@ export default function Login() {
             }
           } catch (err) {
             console.error("Erreur lors de la récupération du patientId:", err);
+          }
+        }
+
+        if ((role === 'MEDECIN' || role === 'Medecin') && userId) {
+          try {
+            const medecinRes = await axios.get(`http://localhost:8080/api/medecins/user/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            if (medecinRes.data && medecinRes.data.id) {
+              localStorage.setItem('medecinId', medecinRes.data.id);
+              console.log("MedecinId stocké avec succès :", medecinRes.data.id);
+            }
+          } catch (err) {
+            console.error("Erreur lors de la récupération du medecinId:", err);
           }
         }
       }

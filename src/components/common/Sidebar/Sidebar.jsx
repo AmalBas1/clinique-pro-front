@@ -11,6 +11,10 @@ export default function Sidebar() {
     navigate('/login');
   };
 
+  const isAdmin = userRole === 'ADMIN';
+  const isMedecin = userRole === 'MEDECIN';
+  const isPatient = userRole === 'PATIENT';
+
   return (
     <aside className="sidebar">
       <div className="sidebar-top-section">
@@ -25,33 +29,31 @@ export default function Sidebar() {
         <span className="nav-practice-title">NAVIGATION PRATIQUE</span>
         
         <nav className="sidebar-nav">
-        <NavLink 
-        to="/" 
-        className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-        >
-        <span className="nav-icon">📊</span>
-        <span>Tableau de bord</span>
-        </NavLink>
+          <NavLink 
+            to="/" 
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            <span className="nav-icon">📊</span>
+            <span>Tableau de bord</span>
+          </NavLink>
 
-         {userRole !== 'PATIENT' && (
-                <NavLink 
-                    to="/patients" 
-                    className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-                >
-                    <span className="nav-icon">👥</span>
-                    <span>Patients</span>
-                </NavLink>
-            )}
-
-         
+          {!isPatient && (
             <NavLink 
-              to="/doctors" 
+              to="/patients" 
               className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
             >
-              <span className="nav-icon">👨‍⚕️</span>
-              <span>Médecins</span>
+              <span className="nav-icon">👥</span>
+              <span>Patients</span>
             </NavLink>
-          
+          )}
+
+          <NavLink 
+            to="/doctors" 
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            <span className="nav-icon">👨‍⚕️</span>
+            <span>Médecins</span>
+          </NavLink>
 
           <NavLink 
             to="/appointments" 
@@ -65,17 +67,29 @@ export default function Sidebar() {
             to="/messages" 
             className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
           >
-              <span className="nav-icon">💬</span>
-              <span>Messages</span>
+            <span className="nav-icon">💬</span>
+            <span>Messages</span>
           </NavLink>
 
-          <NavLink 
-            to={userRole === 'MEDECIN' ? '/medecins/profile' : '/patients/profile'} 
-            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-          >
-            <span className="nav-icon">👤</span>
-            <span>Mon profil</span>
-          </NavLink>
+          {isAdmin && (
+            <NavLink 
+              to="/register-user" 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+            >
+              <span className="nav-icon">➕</span>
+              <span>Admin</span>
+            </NavLink>
+          )}
+
+          {!isAdmin && (
+            <NavLink 
+              to={isMedecin ? '/medecins/profile' : '/patients/profile'} 
+              className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+            >
+              <span className="nav-icon">👤</span>
+              <span>Mon profil</span>
+            </NavLink>
+          )}
         </nav>
       </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CalendarDays, CalendarClock, Mail, Plus, UsersRound, Stethoscope, CheckCircle2, Loader2, UserCheck } from 'lucide-react'
+import { CalendarClock, Mail, UsersRound, Stethoscope, CheckCircle2, Loader2, UserCheck } from 'lucide-react'
 import './Dashboard.css'
 
 export default function Dashboard() {
@@ -18,7 +18,7 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const token = localStorage.getItem('token') || localStorage.getItem('jwt') || localStorage.getItem('accessToken')
+        const token = localStorage.getItem('token') 
         
         const headers = {
             'Content-Type': 'application/json',
@@ -26,6 +26,8 @@ export default function Dashboard() {
         }
 
         const userRole = localStorage.getItem('role') || 'PATIENT';
+        const patientId = localStorage.getItem('patientId');
+        const medecinId = localStorage.getItem('medecinId');
         const userId = localStorage.getItem('userId') || localStorage.getItem('id');
 
         if (userRole === 'PATIENT') {
@@ -35,37 +37,38 @@ export default function Dashboard() {
         }
 
         let rdvUrl = '/api/rendezvous/count'; 
-        if (userRole === 'PATIENT' && userId) {
-            rdvUrl = `/api/rendezvous/patient/${userId}?size=1`;
-        } else if (userRole === 'MEDECIN' && userId) {
-            rdvUrl = `/api/rendezvous/medecin/${userId}?size=1`;
+        if (userRole === 'PATIENT') {
+            const pId = patientId || userId;
+            if (pId) rdvUrl = `/api/rendezvous/patient/${pId}?size=1`;
+        } else if (userRole === 'MEDECIN') {
+            const mId = medecinId || userId;
+            if (mId) rdvUrl = `/api/rendezvous/medecin/${mId}?size=1`;
         }
 
         let messageUrl = '/api/messages/count';
-        if (userRole === 'PATIENT' && userId) {
-            messageUrl = `/api/messages/count/patient/${userId}`;
-        } else if (userRole === 'MEDECIN' && userId) {
-            messageUrl = `/api/messages/count/medecin/${userId}`;
+        if (userRole === 'PATIENT') {
+            const pId = patientId || userId;
+            if (pId) messageUrl = `/api/messages/count/patient/${pId}`;
+        } else if (userRole === 'MEDECIN') {
+            const mId = medecinId || userId;
+            if (mId) messageUrl = `/api/messages/count/medecin/${mId}`;
         }
 
         fetch('/api/patients/count', { headers })
             .then(res => res.ok ? res.json() : 0)
             .then(totalPatients => {
                 setStats(prev => ({ ...prev, mainStatValue: totalPatients }))
-
                 return fetch(rdvUrl, { headers })
             })
             .then(res => res.ok ? res.json() : 0)
             .then(rdvData => {
                 const totalRdv = typeof rdvData === 'number' ? rdvData : (rdvData.totalElements || 0);
                 setStats(prev => ({ ...prev, appointments: totalRdv }))
-
                 return fetch(messageUrl, { headers })
             })
             .then(res => res.ok ? res.json() : 0)
             .then(unreadMessages => {
                 setStats(prev => ({ ...prev, messages: unreadMessages }))
-
                 return fetch('/api/medecins/disponibles', { headers })
             })
             .then(res => res.ok ? res.json() : [])
@@ -105,13 +108,6 @@ export default function Dashboard() {
                     <div className="dashboard-meta">
                         <span className="meta-separator" aria-hidden="true" />
                     </div>
-                </div>
-
-                <div className="dashboard-actions">
-                    <button className="new-appointment-button" type="button">
-                        <Plus aria-hidden="true" />
-                        <span>{user.role === 'PATIENT' ? 'Prendre un RDV' : 'Nouveau RDV'}</span>
-                    </button>
                 </div>
             </header>
 
